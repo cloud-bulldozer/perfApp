@@ -19,7 +19,11 @@ SRC = $(shell find . -name *.go)
 
 all: build buildContainer pushContainer
 
-build: build/perfApp
+build: go-deps build/perfApp
+
+go-deps:
+	go mod tidy
+	go mod vendor
 
 build/perfApp: $(SRC)
 	@echo Building perfApp
