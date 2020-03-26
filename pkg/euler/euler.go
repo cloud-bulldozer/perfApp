@@ -6,10 +6,9 @@ import (
 	"net/http"
 	"time"
 
-	log "github.com/sirupsen/logrus"
-
 	"github.com/rsevilla87/perfapp/internal/perf"
 	"github.com/rsevilla87/perfapp/pkg/utils"
+	log "github.com/sirupsen/logrus"
 )
 
 // HandleEuler Handle requests to compute euler number aproximation
@@ -35,4 +34,5 @@ func calcEuler() {
 		x = math.Pow((1 + 1/n), n)
 		n++
 	}
+	return
 }
