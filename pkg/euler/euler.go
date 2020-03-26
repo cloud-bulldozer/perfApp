@@ -23,7 +23,7 @@ func HandleEuler(w http.ResponseWriter, r *http.Request) {
 		utils.ErrorHandler(err)
 	} else {
 		fmt.Fprintln(w, "Ok")
-		log.Printf("Euler approximation computed in %f seconds\n", elapsed.Seconds())
+		log.Printf("Euler approximation computed in %f seconds", elapsed.Seconds())
 		perf.HTTPRequestDuration.Observe(elapsed.Seconds())
 	}
 }

@@ -41,7 +41,7 @@ func Connect2Db() {
 		DB.conn, _ = sql.Open("postgres", connStr)
 		if err := DB.conn.Ping(); err != nil {
 			log.Warnln(err)
-			log.Warnf("Retrying connection with %s:%s in %d seconds\n", DB.DBHost, DB.DBPort, DB.RetryInt)
+			log.Warnf("Retrying connection with %s:%s in %d seconds", DB.DBHost, DB.DBPort, DB.RetryInt)
 			time.Sleep(time.Duration(DB.RetryInt) * time.Second)
 			continue
 		}

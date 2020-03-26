@@ -23,11 +23,11 @@ objects:
             protocol: TCP
           env:
           - name: POSTGRESQL_USER
-            value: admin
+            value: ${POSTGRESQL_USER}
           - name: POSTGRESQL_PASSWORD
-            value: secret
+            value: ${POSTGRESQL_PASSWORD}
           - name: POSTGRESQL_DATABASE
-            value: mydb
+            value: ${POSTGRESQL_DATABASE}
           resources: {}
           imagePullPolicy: Always
           capabilities: {}
@@ -60,7 +60,7 @@ objects:
             httpGet:
               path: /euler
               port: 8080
-            periodSeconds: 30
+            periodSeconds: 60
             failureThreshold: 1
             timeoutSeconds: 60
             initialDelaySeconds: 30
@@ -69,17 +69,17 @@ objects:
             protocol: TCP
           env:
           - name: POSTGRESQL_USER
-            value: admin
+            value: ${POSTGRESQL_USER}
           - name: POSTGRESQL_PASSWORD
-            value: secret
+            value: ${POSTGRESQL_PASSWORD}
           - name: POSTGRESQL_DATABASE
-            value: mydb
+            value: ${POSTGRESQL_DATABASE}
           - name: POSTGRESQL_HOSTNAME
             value: postgresql-${IDENTIFIER}
           - name: POSTGRESQL_PORT
-            value: "5432"
+            value: '5432'
           - name: POSTGRESQL_RETRY_INTERVAL
-            value: "5"
+            value: ${POSTGRESQL_RETRY_INTERVAL}
           resources: {}
           imagePullPolicy: Always
           capabilities: {}
@@ -131,4 +131,15 @@ parameters:
 - name: IDENTIFIER
   description: Number to append to the name of resources
   value: '1'
-  required: true
+- name: POSTGRESQL_USER
+  description: Postgresql database username
+  value: 'admin'
+- name: POSTGRESQL_PASSWORD
+  description: Postgresql database password
+  value: 'secret'
+- name: POSTGRESQL_DATABASE
+  description: Postgresql database name
+  value: 'mydb'
+- name: POSTGRESQL_RETRY_INTERVAL
+  description: Postgresql connection retry interval
+  value: '5'
