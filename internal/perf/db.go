@@ -45,9 +45,6 @@ func Connect2Db() {
 			time.Sleep(time.Duration(DB.RetryInt) * time.Second)
 			continue
 		}
-		if err := createTables(); err != nil {
-			utils.ErrorHandler(err)
-		}
 		break
 	}
 	log.Println("Database connection successfully established")
@@ -65,22 +62,27 @@ func QueryDB(query string) error {
 	return nil
 }
 
-// CreateTables Creates all tables described at tables
-func createTables() error {
-	for _, q := range tables {
-		if err := QueryDB(q); err != nil {
-			return err
+// CreateTables Creates all tables at tableList
+func CreateTables(tableList []map[string]string) error {
+	for k := range tableList {
+		for t, q := range tableList[k] {
+			log.Infof("Creating table %s: %s", t, q)
+			if err := QueryDB(q); err != nil {
+				return err
+			}
 		}
 	}
 	return nil
 }
 
-// DropTables Drops all tables described at tables
-func DropTables() error {
-	for t := range tables {
-		fmt.Printf("Dropping %s table\n", t)
-		if err := QueryDB(fmt.Sprintf("DROP TABLE %s", t)); err != nil {
-			return err
+// DropTables Drops all tables at tableList
+func DropTables(tableList []map[string]string) error {
+	for k := range tableList {
+		for t := range tableList[k] {
+			log.Infof("Dropping %s table", t)
+			if err := QueryDB(fmt.Sprintf("DROP TABLE %s", t)); err != nil {
+				return err
+			}
 		}
 	}
 	return nil

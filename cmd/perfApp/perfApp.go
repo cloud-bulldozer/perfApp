@@ -15,6 +15,8 @@ import (
 	"github.com/rsevilla87/perfapp/pkg/utils"
 )
 
+var tables []map[string]string
+
 func main() {
 	customFormatter := new(log.TextFormatter)
 	customFormatter.TimestampFormat = "2006-01-02 15:04:05"
@@ -31,6 +33,10 @@ func main() {
 		perf.DB.RetryInt = retryInt
 	}
 	perf.Connect2Db()
+	tables = append(tables, euler.Tables)
+	if err := perf.CreateTables(tables); err != nil {
+		utils.ErrorHandler(err)
+	}
 	http.Handle("/metrics", promhttp.Handler())
 	http.HandleFunc("/euler", euler.HandleEuler)
 	log.Printf("Listening at 8080")
@@ -42,6 +48,8 @@ func main() {
 func handleInterrupt(c <-chan os.Signal) {
 	<-c
 	log.Println("Interrupt signal received")
-	perf.DropTables()
+	if err := perf.DropTables(tables); err != nil {
+		utils.ErrorHandler(err)
+	}
 	os.Exit(0)
 }
