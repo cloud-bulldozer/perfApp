@@ -11,10 +11,11 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
+// Tables Euler workload required tables
 var Tables = map[string]string{"euler": "CREATE TABLE IF NOT EXISTS euler (date TIMESTAMP, elapsed FLOAT(24))"}
 
-// HandleEuler Handle requests to compute euler number aproximation
-func HandleEuler(w http.ResponseWriter, r *http.Request) {
+// Handler Handle requests to compute euler number aproximation
+func Handler(w http.ResponseWriter, r *http.Request) {
 	log.Println("Computing euler approximation")
 	now := time.Now()
 	calcEuler()

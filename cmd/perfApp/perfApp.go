@@ -12,6 +12,7 @@ import (
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/rsevilla87/perfapp/internal/perf"
 	"github.com/rsevilla87/perfapp/pkg/euler"
+	"github.com/rsevilla87/perfapp/pkg/timestamp"
 	"github.com/rsevilla87/perfapp/pkg/utils"
 )
 
@@ -33,12 +34,13 @@ func main() {
 		perf.DB.RetryInt = retryInt
 	}
 	perf.Connect2Db()
-	tables = append(tables, euler.Tables)
+	tables = append(tables, euler.Tables, timestamp.Tables)
 	if err := perf.CreateTables(tables); err != nil {
 		utils.ErrorHandler(err)
 	}
 	http.Handle("/metrics", promhttp.Handler())
-	http.HandleFunc("/euler", euler.HandleEuler)
+	http.HandleFunc("/euler", euler.Handler)
+	http.HandleFunc("/ready", timestamp.Handler)
 	log.Printf("Listening at 8080")
 	if err := http.ListenAndServe(":8080", nil); err != nil {
 		utils.ErrorHandler(err)

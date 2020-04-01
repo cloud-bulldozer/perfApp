@@ -2,4 +2,5 @@
 
 ## Available workloads
 
-- Euler aproximation: Calculates an Euler number approximation and writes compute time on the euler table
+- Ready: Inserts a timestamp record in the ts table. Available at `/ready`
+- Euler aproximation: Computes an Euler number approximation and writes compute time in the euler table. Available at `/euler`

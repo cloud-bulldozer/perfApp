@@ -16,19 +16,20 @@ PROJECT=rsevilla
 IMAGE=perfapp
 TAG=latest
 SRC = $(shell find . -name *.go)
+BINARY = perfApp
 
 all: build buildContainer pushContainer
 
-build: go-deps build/perfApp
+build: build/${BINARY}
 
 go-deps:
 	go mod tidy
 	go mod vendor
 
-build/perfApp: $(SRC)
-	@echo Building perfApp
+build/${BINARY}: $(SRC)
+	@echo Building ${BINARY}
 	mkdir -p build
-	$(GO_BUILD_RECIPE) -o build/perfApp cmd/perfApp/perfApp.go
+	$(GO_BUILD_RECIPE) -o build/${BINARY} cmd/perfApp/perfApp.go
 
 container: buildContainer pushContainer
 
@@ -38,4 +39,5 @@ buildContainer: build/perfApp Containerfile
 pushContainer:
 	$(ENGINE) push $(REGISTRY)/$(PROJECT)/$(IMAGE):$(TAG)
 
-
+run: build
+	./build/${BINARY}

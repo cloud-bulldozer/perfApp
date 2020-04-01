@@ -58,7 +58,7 @@ objects:
           image: quay.io/rsevilla/perfapp:latest
           readinessProbe:
             httpGet:
-              path: /euler
+              path: ${LIVENESS_ENDPOINT}
               port: 8080
             periodSeconds: 30
             failureThreshold: 1
@@ -143,3 +143,6 @@ parameters:
 - name: POSTGRESQL_RETRY_INTERVAL
   description: Postgresql connection retry interval
   value: '5'
+- name: LIVENESS_ENDPOINT
+  description: Liveness probe endpoint
+  value: '/ready'
