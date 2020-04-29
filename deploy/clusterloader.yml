@@ -7,13 +7,13 @@ ClusterLoader:
       ifexists: delete
       tuning: default
       templates:
-        - num: 10
+        - num: 200
           file: perf-app.yml
   tuningsets:
     - name: default
       templates:
         stepping:
-          stepsize: 2
+          stepsize: 50
           pause: 5
           timeout: 10
         rate_limit:
