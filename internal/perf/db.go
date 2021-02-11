@@ -34,10 +34,13 @@ var DB DBInfo = DBInfo{
 	RetryInt:   5,
 }
 
+const dbTImeout = 10
+
 // Connect2Db Connects to a Postgres database using DBInfo
 func Connect2Db() {
-	connStr := fmt.Sprintf("user=%s password=%s host=%s port=%s dbname=%s sslmode=disable", DB.DBUser, DB.DBPassword, DB.DBHost, DB.DBPort, DB.DBName)
+	connStr := fmt.Sprintf("user=%s password=%s host=%s port=%s dbname=%s sslmode=disable connect_timeout=%d", DB.DBUser, DB.DBPassword, DB.DBHost, DB.DBPort, DB.DBName, dbTImeout)
 	for {
+		log.Infof("Connecting with database %s:%s", DB.DBHost, DB.DBPort)
 		DB.conn, _ = sql.Open("postgres", connStr)
 		if err := DB.conn.Ping(); err != nil {
 			log.Warnln(err)
