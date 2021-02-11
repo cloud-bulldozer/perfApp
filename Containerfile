@@ -1,4 +1,4 @@
-FROM registry.access.redhat.com/ubi8/ubi-minimal:latest
+FROM docker.io/busybox:latest
 
 MAINTAINER Raúl Sevilla
 
