@@ -13,6 +13,7 @@ import (
 	"github.com/rsevilla87/perfapp/internal/perf"
 	"github.com/rsevilla87/perfapp/pkg/euler"
 	"github.com/rsevilla87/perfapp/pkg/timestamp"
+	"github.com/rsevilla87/perfapp/pkg/health"
 	"github.com/rsevilla87/perfapp/pkg/utils"
 )
 
@@ -41,6 +42,7 @@ func main() {
 	http.Handle("/metrics", promhttp.Handler())
 	http.HandleFunc("/euler", euler.Handler)
 	http.HandleFunc("/ready", timestamp.Handler)
+	http.HandleFunc("/health", health.Handler)
 	log.Printf("Listening at 8080")
 	if err := http.ListenAndServe(":8080", nil); err != nil {
 		utils.ErrorHandler(err)
