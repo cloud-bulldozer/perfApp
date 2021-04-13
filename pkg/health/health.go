@@ -6,10 +6,9 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-
 // Handler Handles health endpoint
 func Handler(w http.ResponseWriter, r *http.Request) {
 	log.Info("Returning value for health endpoint")
-        w.WriteHeader(200)
-        w.Write([]byte("ok"))
+	w.WriteHeader(200)
+	w.Write([]byte("ok"))
 }
