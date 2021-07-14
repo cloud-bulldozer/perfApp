@@ -1,0 +1,37 @@
+name: perfapp CI
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+
+  build-master:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        golang-version: [1.16]
+        arch:
+         - arm64
+         - amd64
+         - ppc64le
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Install dependencies
+      run: sudo apt-get install qemu-user-static podman fuse-overlayfs
+
+    - name: Set up Go
+      uses: actions/setup-go@v2
+      with:
+        go-version: ${{ matrix.golang-version }}
+
+    - name: Login in quay
+      run: podman login quay.io -u ${QUAY_USER} -p ${QUAY_TOKEN}
+      env:
+        QUAY_USER: ${{ secrets.QUAY_USER }}
+        QUAY_TOKEN: ${{ secrets.QUAY_TOKEN }}
+
+    - name: Build binary and push container 
+      run: ARCH=${{ matrix.arch }} make
