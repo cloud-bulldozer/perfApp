@@ -7,7 +7,6 @@ import (
 	"time"
 
 	"github.com/rsevilla87/perfapp/internal/perf"
-	"github.com/rsevilla87/perfapp/pkg/utils"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -19,14 +18,14 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	log.Println("Computing euler approximation")
 	now := time.Now()
 	calcEuler()
-	elapsed := time.Now().Sub(now)
-	insert := fmt.Sprintf("INSERT INTO euler VALUES ('%s', '%f')", now.Format(time.RFC3339), elapsed.Seconds())
+	insert := fmt.Sprintf("INSERT INTO euler VALUES ('%s', '%f')", now.Format(time.RFC3339), time.Since(now).Seconds())
 	if err := perf.QueryDB(insert); err != nil {
-		utils.ErrorHandler(err)
+		w.WriteHeader(http.StatusServiceUnavailable)
+		fmt.Fprintln(w, err.Error())
 	} else {
 		fmt.Fprintln(w, "Ok")
-		log.Printf("Euler approximation computed in %f seconds", elapsed.Seconds())
-		perf.HTTPRequestDuration.Observe(elapsed.Seconds())
+		log.Printf("Euler approximation computed in %f seconds", time.Since(now).Seconds())
+		perf.HTTPRequestDuration.Observe(time.Since(now).Seconds())
 	}
 }
 
@@ -37,5 +36,4 @@ func calcEuler() {
 		x = math.Pow((1 + 1/n), n)
 		n++
 	}
-	return
 }

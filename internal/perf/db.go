@@ -10,7 +10,6 @@ import (
 	"time"
 
 	_ "github.com/lib/pq"
-	"github.com/rsevilla87/perfapp/pkg/utils"
 )
 
 // DBInfo Database connection information
@@ -60,7 +59,7 @@ func QueryDB(query string) error {
 		return err
 	}
 	if _, err := DB.conn.Exec(query); err != nil {
-		utils.ErrorHandler(err)
+		return err
 	}
 	return nil
 }
