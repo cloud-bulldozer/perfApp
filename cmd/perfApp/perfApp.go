@@ -27,23 +27,25 @@ func main() {
 	c := make(chan os.Signal)
 	signal.Notify(c, syscall.SIGINT)
 	go handleInterrupt(c)
-	go func() {
-		if os.Getenv("POSTGRESQL_RETRY_INTERVAL") != "" {
-			retryInt, err := strconv.Atoi(os.Getenv("POSTGRESQL_RETRY_INTERVAL"))
-			if err != nil {
+	if os.Getenv("POSTGRESQL_HOSTNAME") != "" {
+		go func() {
+			if os.Getenv("POSTGRESQL_RETRY_INTERVAL") != "" {
+				retryInt, err := strconv.Atoi(os.Getenv("POSTGRESQL_RETRY_INTERVAL"))
+				if err != nil {
+					utils.ErrorHandler(err)
+				}
+				perf.DB.RetryInt = retryInt
+			}
+			perf.Connect2Db()
+			tables = append(tables, euler.Tables, ready.Tables)
+			if err := perf.CreateTables(tables); err != nil {
 				utils.ErrorHandler(err)
 			}
-			perf.DB.RetryInt = retryInt
-		}
-		perf.Connect2Db()
-		tables = append(tables, euler.Tables, ready.Tables)
-		if err := perf.CreateTables(tables); err != nil {
-			utils.ErrorHandler(err)
-		}
-	}()
+		}()
+		http.HandleFunc("/euler", euler.Handler)
+		http.HandleFunc("/ready", ready.Handler)
+	}
 	http.Handle("/metrics", promhttp.Handler())
-	http.HandleFunc("/euler", euler.Handler)
-	http.HandleFunc("/ready", ready.Handler)
 	http.HandleFunc("/health", health.Handler)
 	log.Printf("Listening at 8080")
 	if err := http.ListenAndServe(":8080", nil); err != nil {
