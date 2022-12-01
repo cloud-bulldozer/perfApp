@@ -2,27 +2,21 @@
 
 .PHONY: all build test clean help
 
-BUILD_DATE=$(shell date '+%Y-%m-%d-%H:%M:%S')
-GIT_COMMIT=$(shell git rev-parse HEAD)
-GIT_DIRTY=$(shell test -n "`git status --porcelain`" && echo "+CHANGES" || true)
 SRC=$(shell find . -name *.go)
 BINARY=perfApp-$(ARCH)
 GOCMD=go
-GOBUILD=$(GOCMD) build
-GOCLEAN=$(GOCMD) clean
-GOTEST=$(GOCMD) test -v
 ARCH ?= amd64
 GOOS ?= linux
 GO_BUILD_RECIPE:=GOOS=$(GOOS) CGO_ENABLED=0 GOARCH=$(ARCH) go build
 ENGINE=podman
 REGISTRY=quay.io
-PROJECT=rsevilla
+ORG?=cloud-bulldozer
 IMAGE=perfapp
 
 # Container versioning
 VERSION?=latest
 TAG?=$(VERSION)-$(ARCH)
-CONTAINER_NAME=$(REGISTRY)/$(PROJECT)/$(IMAGE):$(TAG)
+CONTAINER_NAME=$(REGISTRY)/$(ORG)/$(IMAGE):$(TAG)
 
 all: build buildContainer pushContainer
 
