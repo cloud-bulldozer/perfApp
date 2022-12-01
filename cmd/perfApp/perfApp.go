@@ -24,7 +24,7 @@ func main() {
 	customFormatter.TimestampFormat = "2006-01-02 15:04:05"
 	customFormatter.FullTimestamp = true
 	log.SetFormatter(customFormatter)
-	c := make(chan os.Signal)
+	c := make(chan os.Signal, 1)
 	signal.Notify(c, syscall.SIGINT)
 	go handleInterrupt(c)
 	if os.Getenv("POSTGRESQL_HOSTNAME") != "" {
@@ -56,8 +56,5 @@ func main() {
 func handleInterrupt(c <-chan os.Signal) {
 	<-c
 	log.Println("Interrupt signal received")
-	if err := perf.DropTables(tables); err != nil {
-		utils.ErrorHandler(err)
-	}
 	os.Exit(0)
 }

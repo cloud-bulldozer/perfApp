@@ -79,16 +79,3 @@ func CreateTables(tableList []map[string]string) error {
 	}
 	return nil
 }
-
-// DropTables Drops all tables at tableList
-func DropTables(tableList []map[string]string) error {
-	for k := range tableList {
-		for t := range tableList[k] {
-			log.Infof("Dropping %s table", t)
-			if err := QueryDB(fmt.Sprintf("DROP TABLE %s", t)); err != nil {
-				return err
-			}
-		}
-	}
-	return nil
-}
