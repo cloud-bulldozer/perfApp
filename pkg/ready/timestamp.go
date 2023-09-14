@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/rsevilla87/perfapp/internal/perf"
+	"ocp.performance.io/perfapp/internal/perf"
 	log "github.com/sirupsen/logrus"
 )
 

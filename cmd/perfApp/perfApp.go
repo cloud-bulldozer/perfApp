@@ -10,11 +10,11 @@ import (
 	log "github.com/sirupsen/logrus"
 
 	"github.com/prometheus/client_golang/prometheus/promhttp"
-	"github.com/rsevilla87/perfapp/internal/perf"
-	"github.com/rsevilla87/perfapp/pkg/euler"
-	"github.com/rsevilla87/perfapp/pkg/health"
-	"github.com/rsevilla87/perfapp/pkg/ready"
-	"github.com/rsevilla87/perfapp/pkg/utils"
+	"ocp.performance.io/perfapp/internal/perf"
+	"ocp.performance.io/perfapp/pkg/euler"
+	"ocp.performance.io/perfapp/pkg/health"
+	"ocp.performance.io/perfapp/pkg/ready"
+	"ocp.performance.io/perfapp/pkg/utils"
 )
 
 var tables []map[string]string

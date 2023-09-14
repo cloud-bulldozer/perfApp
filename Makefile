@@ -24,7 +24,6 @@ build: build/${BINARY}
 
 go-deps:
 	go mod tidy
-	go mod vendor
 
 build/${BINARY}: $(SRC)
 	@echo -e "\033[2mBuilding ${BINARY} for $(GOOS)-$(ARCH)\033[0m"

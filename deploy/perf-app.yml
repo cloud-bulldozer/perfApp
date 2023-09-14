@@ -56,7 +56,7 @@ objects:
       spec:
         containers:
         - name: perfapp
-          image: quay.io/rsevilla/perfapp:latest
+          image: quay.io/cloud-bulldozer/perfapp:latest
           readinessProbe:
             httpGet:
               path: ${LIVENESS_ENDPOINT}
