@@ -2,6 +2,6 @@ FROM docker.io/busybox:latest
 
 MAINTAINER Raúl Sevilla
 
-ARG ARCH=amd64
+ARG ARCH
 COPY build/perfApp-${ARCH} /usr/bin/perfApp
 CMD perfApp
