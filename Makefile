@@ -5,7 +5,7 @@
 SRC=$(shell find . -name *.go)
 BINARY=perfApp-$(ARCH)
 GOCMD=go
-ARCH ?= amd64
+ARCH ?= $(shell go env GOARCH)
 GOOS ?= linux
 GO_BUILD_RECIPE:=GOOS=$(GOOS) CGO_ENABLED=0 GOARCH=$(ARCH) go build
 ENGINE=podman
@@ -34,7 +34,8 @@ container: buildContainer pushContainer
 
 buildContainer: build/$(BINARY) Containerfile
 	@echo -e "\n\033[2mBuilding container $(CONTAINER_NAME)\033[0m"
-	$(ENGINE) build --pull-always --arch=$(ARCH) --build-arg=ARCH=$(ARCH) -t $(CONTAINER_NAME) .
+	$(ENGINE) build --pull-always -f containers/Containerfile \
+	--arch=$(ARCH) --build-arg ARCH=$(ARCH) -t $(CONTAINER_NAME) ./containers
 
 pushContainer:
 	@echo -e "\n\033[2mPushing container $(CONTAINER_NAME)\033[0m"

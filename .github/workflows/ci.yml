@@ -10,20 +10,25 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        golang-version: [1.16]
+        golang-version: [1.19]
         arch:
          - arm64
          - amd64
          - ppc64le
+         - s390x
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
 
     - name: Install dependencies
-      run: sudo apt-get install qemu-user-static podman fuse-overlayfs
+      run: |
+        sudo apt-get update -y
+        sudo apt-get install qemu-user-static fuse-overlayfs -y
+        sudo apt-get install podman -y
+      if: runner.os == 'Linux'
 
     - name: Set up Go
-      uses: actions/setup-go@v2
+      uses: actions/setup-go@v4
       with:
         go-version: ${{ matrix.golang-version }}
 
@@ -33,5 +38,5 @@ jobs:
         QUAY_USER: ${{ secrets.QUAY_USER }}
         QUAY_TOKEN: ${{ secrets.QUAY_TOKEN }}
 
-    - name: Build binary and push container 
+    - name: Build binary and Publish Multi-Arch container
       run: ARCH=${{ matrix.arch }} make
