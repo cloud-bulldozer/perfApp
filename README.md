@@ -1,3 +1,8 @@
+# Deprecation notice
+**The content of this repository is not available in https://github.com/cloud-bulldozer/images/**
+
+---
+
 # Performance application
 
 ## Available workloads
